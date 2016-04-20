@@ -8,6 +8,7 @@ class nullmailer::params {
                           'exim4-base', 'exim4-config', 'exim4']
       $service = 'nullmailer'
       $manage_etc_mailname = true
+      $mailname = "${::domain}"
     }
     default: {
       fail("Unsupported platform: ${::operatingsystem}")

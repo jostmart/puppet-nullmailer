@@ -2,16 +2,24 @@ class nullmailer::config {
 
   if $nullmailer::manage_etc_mailname == true {
 
-    file {"nullmailer /etc/mailname for ${::fqdn}":
+    file {"nullmailer /etc/mailname for $nullmailer::mailname":
       ensure  => present,
       name    => '/etc/mailname',
-      content => "${::fqdn}\n",
+      content => "$nullmailer::mailname\n",
     }
 
   }
 
   file { '/etc/nullmailer/remotes':
     content => "$nullmailer::remoterelay smtp $nullmailer::remoteopts\n",
+    require => Class['nullmailer::package'],
+    notify  => Class['nullmailer::service'],
+    owner   => 'mail',
+    group   => 'mail',
+    mode    => '0600',
+  }
+  file { '/etc/nullmailer/me':
+    content => "$nullmailer::domain\n",
     require => Class['nullmailer::package'],
     notify  => Class['nullmailer::service'],
     owner   => 'mail',
